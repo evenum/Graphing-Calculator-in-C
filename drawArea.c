@@ -1,5 +1,6 @@
 #include <math.h>
 #include "drawArea.h"
+#include "callBacks.h"
 
 void drawGraph(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data)
 {
@@ -44,9 +45,10 @@ void drawGraph(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointe
 void drawSineWave(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data)
 {
 
+    ddInfo *data = (ddInfo *)user_data;
     drawGraph(area, cr, width, height, user_data);
     double scale, x, y;
-    scale = 120.0;
+    scale = gtk_range_get_value(GTK_RANGE(data->scale));
     x = y = 0.0;
     cairo_set_source_rgb(cr, 0.3, 0.3, 0.3);
     cairo_set_line_width(cr, 2.0);
@@ -62,9 +64,10 @@ void drawSineWave(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpoi
 void drawCosineWave(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data)
 {
 
+    ddInfo *data = (ddInfo *)user_data;
     drawGraph(area, cr, width, height, user_data);
     double scale, x, y;
-    scale = 120.0;
+    scale = gtk_range_get_value(GTK_RANGE(data->scale));
     x = y = 0.0;
     cairo_set_source_rgb(cr, 0.3, 0.3, 0.3);
     cairo_set_line_width(cr, 2.0);
