@@ -18,6 +18,9 @@ void drawButton(GtkButton *button, gpointer dd_Info)
     case 2:
         gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(data->drawArea), drawLinear, data, NULL);
         break;
+    case 3:
+        gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(data->drawArea), drawTest, data, NULL);
+        break;
     }
 }
 
@@ -37,7 +40,7 @@ void app_activate(GApplication *app, GFile **files, int n_files, char *hint)
     GtkWidget *scale;
     GtkStringList *stringList;
 
-    char *options[] = {"Sine", "Cosine", "Linear", NULL};
+    char *options[] = {"Sine", "Cosine", "Linear", "Test", NULL};
     stringList = gtk_string_list_new((const char *const *)options);
     dropDown = gtk_drop_down_new(G_LIST_MODEL(stringList), NULL);
     data->dropDown = dropDown;
@@ -45,7 +48,7 @@ void app_activate(GApplication *app, GFile **files, int n_files, char *hint)
     gtk_window_set_title(GTK_WINDOW(window), "Graphing Calculator");
     gtk_window_set_default_size(GTK_WINDOW(window), 1280, 720);
 
-    scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0.0, 200.0, 1.0);
+    scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 1.0, 100.0, 0.5);
     data->scale = scale;
     boxHorizontal = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 20);
     separator = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
@@ -70,12 +73,13 @@ void app_activate(GApplication *app, GFile **files, int n_files, char *hint)
     gtk_widget_set_margin_top(boxSideMenu, 40);
     gtk_widget_set_hexpand(entry1, TRUE);
 
-    gtk_drawing_area_set_content_width(GTK_DRAWING_AREA(drawArea), 1280);
-    gtk_drawing_area_set_content_height(GTK_DRAWING_AREA(drawArea), 720);
+    gtk_drawing_area_set_content_width(GTK_DRAWING_AREA(drawArea), 1000);
+    gtk_drawing_area_set_content_height(GTK_DRAWING_AREA(drawArea), 1000);
     gtk_widget_set_hexpand(drawArea, TRUE);
 
     gtk_box_append(GTK_BOX(boxHorizontal), drawArea);
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(drawArea), drawGraph, NULL, NULL);
     g_signal_connect_data(button1, "clicked", G_CALLBACK(drawButton), data, NULL, 0);
+    g_signal_connect_data(scale, "value-changed", G_CALLBACK(drawButton), data, NULL, 0);
     gtk_window_present(GTK_WINDOW(window));
 }

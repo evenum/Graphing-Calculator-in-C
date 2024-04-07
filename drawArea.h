@@ -8,5 +8,6 @@ void drawGraph(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointe
 void drawLinear(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data);
 void drawSineWave(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data);
 void drawCosineWave(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data);
+void drawTest(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data);
 
 #endif // _DRAW_AREA_H

@@ -2,6 +2,11 @@
 #include "drawArea.h"
 #include "callBacks.h"
 
+// double bezierControlPointY(double cpy, double t)
+// {
+//     return (cpy * (6 * pow(t, 3) - 9 * pow(t, 2) - 3 * t));
+// }
+
 void drawGraph(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data)
 {
     // Draw Grid
@@ -48,15 +53,22 @@ void drawSineWave(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpoi
     ddInfo *data = (ddInfo *)user_data;
     drawGraph(area, cr, width, height, user_data);
     double scale, x, y;
+
+    double cpx = G_PI;
+    double cpyS = (2 * sqrt(3));
+
     scale = gtk_range_get_value(GTK_RANGE(data->scale));
     x = y = 0.0;
-    cairo_set_source_rgb(cr, 0.3, 0.3, 0.3);
+    cairo_set_source_rgb(cr, 0.1, 0.3, 0.3);
     cairo_set_line_width(cr, 2.0);
-
-    for (x = -width; x <= width; x += 0.01)
+    cairo_move_to(cr, x, 0);
+    double cpxS = x + G_PI * scale;
+    cpyS = cpyS * scale;
+    for (x = 0; x <= width;)
     {
-        y = sin(x) * scale;
-        cairo_line_to(cr, x * scale, y);
+        cairo_curve_to(cr, cpxS, cpyS, cpxS, -cpyS, x + (2 * G_PI) * scale, 0);
+        x = x + (2 * G_PI) * scale;
+        cpxS = cpxS + (2 * G_PI) * scale;
     }
     cairo_stroke(cr);
 }
@@ -93,6 +105,42 @@ void drawLinear(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpoint
     {
         y = x;
         cairo_line_to(cr, x, y);
+    }
+    cairo_stroke(cr);
+}
+
+void drawTest(GtkDrawingArea *area, cairo_t *cr, int width, int height, gpointer user_data)
+{
+
+    ddInfo *data = (ddInfo *)user_data;
+    drawGraph(area, cr, width, height, user_data);
+    double scale, x, y;
+
+    double cpx = G_PI;
+    double cpyS = (2 * sqrt(3));
+
+    scale = gtk_range_get_value(GTK_RANGE(data->scale));
+    x = y = 0.0;
+    cairo_set_source_rgb(cr, 1, 0.3, 0.3);
+    cairo_set_line_width(cr, 6.0);
+    cairo_move_to(cr, x, 0);
+    double cpxS = x + G_PI * scale;
+    cpyS = cpyS * scale;
+    for (x = 0; x <= width;)
+    {
+        cairo_curve_to(cr, cpxS, cpyS, cpxS, -cpyS, x + (2 * G_PI) * scale, 0);
+        x = x + (2 * G_PI) * scale;
+        cpxS = cpxS + (2 * G_PI) * scale;
+    }
+    cairo_stroke(cr);
+
+    cairo_set_source_rgb(cr, 0.1, 0.3, 0.3);
+    cairo_set_line_width(cr, 2.0);
+
+    for (x = -width; x <= width; x += 0.01)
+    {
+        y = sin(x) * scale;
+        cairo_line_to(cr, x * scale, y);
     }
     cairo_stroke(cr);
 }
